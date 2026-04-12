@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	"godoctor/internal/tools/docs"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -27,6 +28,12 @@ func main() {
 			},
 		}, nil, nil
 	})
+
+	// Add the read_docs tool
+	mcp.AddTool(server, &mcp.Tool{
+		Name:        "read_docs",
+		Description: "Returns the documentation for a package or symbol",
+	}, docs.ReadDocsTool)
 
 	// Run the server on the stdio transport
 	if err := server.Run(context.Background(), &mcp.StdioTransport{}); err != nil {

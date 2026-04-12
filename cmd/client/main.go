@@ -12,8 +12,8 @@ import (
 )
 
 func main() {
-	listTools := flag.Bool("list-tools", false, "List available tools")
-	callTool := flag.String("call-tool", "", "Call a tool with the given name")
+	listTools := flag.Bool("tools-list", false, "List available tools")
+	callTool := flag.String("tool-call", "", "Call a tool with the given name")
 	flag.Parse()
 
 	if !*listTools && *callTool == "" {
@@ -48,8 +48,66 @@ func main() {
 			fmt.Printf("- %s: %s\n", tool.Name, tool.Description)
 		}
 	} else if *callTool != "" {
+		var args map[string]any
+		switch *callTool {
+		case "read_docs":
+			remainingArgs := flag.Args()
+			if len(remainingArgs) > 0 {
+				target := remainingArgs[0]
+				// Split into package and symbol if possible
+				// For simplicity, we can just pass the first arg as package if no dot,
+				// or split by dot.
+				// But wait, the tool expects "package" and "symbol".
+				// If target is "fmt.Println", we should split it.
+				// However, if the user provides "github.com/mcp/go-sdk/mcp", there's no symbol.
+				// Let's use a simple heuristic for now as requested.
+				// "fmt" -> package: fmt
+				// "fmt.Println" -> package: fmt, symbol: Println
+
+				// Actually, "go doc" can take "fmt.Println".
+				// Let's refine the logic to match the requirements.
+
+				lastDot := -1
+				for i := len(target) - 1; i >= 0; i-- {
+					if target[i] == '.' {
+						// Make sure it's not part of a domain (e.g., github.com/...)
+						// A dot is a symbol separator if it's after the last slash.
+						lastSlash := -1
+						for j := i; j >= 0; j-- {
+							if target[j] == '/' {
+								lastSlash = j
+								break
+							}
+						}
+						if i > lastSlash {
+							lastDot = i
+						}
+						break
+					}
+				}
+
+				if lastDot != -1 {
+					args = map[string]any{
+						"package": target[:lastDot],
+						"symbol":  target[lastDot+1:],
+					}
+				} else {
+					args = map[string]any{
+						"package": target,
+					}
+				}
+			}
+			val, ok := args["package"].(string)
+			if !ok || val == "" {
+				fmt.Printf("Package name is invalid.\n")
+				fmt.Printf("Usage: $ client -tools-list read_docs ${Package name} \n")
+				os.Exit(1)
+			}
+		}
+
 		res, err := session.CallTool(ctx, &mcp.CallToolParams{
-			Name: *callTool,
+			Name:      *callTool,
+			Arguments: args,
 		})
 		if err != nil {
 			log.Fatalf("Failed to call tool: %v", err)
