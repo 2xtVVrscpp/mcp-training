@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"godoctor/internal/tools/docs"
+	"godoctor/internal/tools/hello"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -15,24 +16,15 @@ func main() {
 	}, nil)
 
 	// Add the hello_world tool
-	// We use any for input since it doesn't take arguments
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        "hello_world",
-		Description: "Returns a hello message",
-	}, func(ctx context.Context, req *mcp.CallToolRequest, args any) (*mcp.CallToolResult, any, error) {
-		return &mcp.CallToolResult{
-			Content: []mcp.Content{
-				&mcp.TextContent{
-					Text: "Hello, MCP world!",
-				},
-			},
-		}, nil, nil
-	})
+		Name:        hello.ToolName,
+		Description: hello.ToolDescription,
+	}, hello.HelloWorldTool)
 
 	// Add the read_docs tool
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        "read_docs",
-		Description: "Returns the documentation for a package or symbol",
+		Name:        docs.ToolName,
+		Description: docs.ToolDescription,
 	}, docs.ReadDocsTool)
 
 	// Run the server on the stdio transport

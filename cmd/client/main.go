@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 
+	"godoctor/internal/tools/docs"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -50,7 +51,7 @@ func main() {
 	} else if *callTool != "" {
 		var args map[string]any
 		switch *callTool {
-		case "read_docs":
+		case docs.ToolName:
 			remainingArgs := flag.Args()
 			if len(remainingArgs) > 0 {
 				target := remainingArgs[0]
