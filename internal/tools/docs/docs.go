@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 
-	"godoctor/internal/mcputil"
+	"mcp-training/internal/mcputil"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )

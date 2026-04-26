@@ -4,8 +4,9 @@ import (
 	"context"
 	"log"
 
-	"godoctor/internal/tools/docs"
-	"godoctor/internal/tools/hello"
+	"mcp-training/internal/tools/docs"
+	"mcp-training/internal/tools/hello"
+
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 

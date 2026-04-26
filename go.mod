@@ -1,4 +1,4 @@
-module godoctor
+module mcp-training
 
 go 1.25.0
 

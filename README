@@ -28,3 +28,6 @@ All Go code **must** be formatted with `gofmt` before being submitted.
 - internal/ contains source code for packages not meant to be exported (e.g. internal/tools/hello)
 - bin/ contains the compiled binaries
 - At the root place README.md, go.mod and go.sum
+- procedure describe what gemini executes. 
+- prompt describe what I ask/request to gemini.
+  - I forgot to memorize prompt on implmentation of mcputils
