@@ -3,7 +3,8 @@ package hello
 import (
 	"context"
 
-	"godoctor/internal/mcputil"
+	"mcp-training/internal/mcputil"
+
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 

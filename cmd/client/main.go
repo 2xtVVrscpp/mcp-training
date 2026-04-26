@@ -8,7 +8,8 @@ import (
 	"os"
 	"os/exec"
 
-	"godoctor/internal/tools/docs"
+	"mcp-training/internal/tools/docs"
+
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
